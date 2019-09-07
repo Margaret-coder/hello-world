@@ -3,11 +3,9 @@
 using namespace std;
 // Figure.cpp
 
-int Figure::counterr = 0;
 
 Figure::Figure()
 {
-	cout << endl << counterr++;
 	figure_left_top_point.x = figure_coord[0].x;
 	figure_left_top_point.y = figure_coord[0].y;
 	SetMinMaxCoord();

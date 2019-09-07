@@ -21,6 +21,7 @@ public:
 	bool Is_falling_figure_collision();
 	void Place_figure();
 	void Remove_previous_figure_state();
+	void Set_figure_as_a_field_part();
 	void StartGame();
 };
 

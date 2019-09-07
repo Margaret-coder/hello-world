@@ -9,6 +9,9 @@ using namespace std;
 
 // Model
 
+
+int Field::figure_counterr = 1 ;
+
 Field::Field()
 {
 //	width = 20;
@@ -79,6 +82,7 @@ Field::~Field()
 }
 
 void Field:: set_new_figure(Figure f) {
+//	cout << endl << figure_counterr++;
 	falling_figure = f;
 	falling_figure_left_top_point.x = width / 2 - 1;
 	falling_figure_left_top_point.y = 0;

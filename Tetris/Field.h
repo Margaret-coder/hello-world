@@ -16,6 +16,7 @@ class Field
 	Figure previous_falling_figure_state;
 	Figure next_figure;
 public:
+	static int figure_counterr;
 	Field();
 	Field(int _width, int _height);
 	Field(const Field& f);

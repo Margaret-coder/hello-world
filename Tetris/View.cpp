@@ -41,8 +41,7 @@ void View::DrawField(Field game_field) {
 	//	}
 	//	cout << endl;
 	//}
-	//cout << " " << game_field_cells[1][1] << " ";
-	//_getch();
+
 	array<Coord, 4> temp_figure_coord = game_field.get_figure().get_figure_coord();
 	COORD c;
 	c.X = offset.x;
@@ -96,7 +95,7 @@ void View::DrawField(Field game_field) {
 
 const char* View::ViewAction(Field game_field) {
 	 int** game_field_cells = game_field.get_field_cells();
-	 //for (int i = 0; i < game_field.get_width(); i++) // не отмечена фигура на матрице поля, только один ее элемент
+	 //for (int i = 0; i < game_field.get_width(); i++) 
 	 //{
 	 //	for (int j = 0; j < game_field.get_height(); j++) {
 	 //		cout << game_field.get_field_cells()[i][j] << ' ';

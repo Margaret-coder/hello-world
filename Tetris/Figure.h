@@ -15,7 +15,7 @@ class Figure
 	map <string, int> shapes;
 	int maxx, maxy, minx, miny, dif;
 public:
-	static int counterr;
+
 	Figure();
 	~Figure();
 	array<Coord, 4> get_figure_coord();
