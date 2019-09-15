@@ -15,7 +15,7 @@ int Field::figure_counterr = 1 ;
 Field::Field()
 {
 //	width = 20;
-//	height = 20;
+//	height = 10;
 	width = 8;
 	height = 8;
 	field_cells = new int*[width];
@@ -133,15 +133,6 @@ void Field::set_field_cells(int** _field_cells) { // может вместо двумерного мас
 			field_cells[i][j] = _field_cells[i][j];
 		}	
 	}
-	//for (int i = 0; i < width; i++)
-	//{
-
-	//	for (int j = 0; j < height; j++) {
-	//		cout << field_cells[i][j] << ' ';
-	//	}
-	//	cout << endl;
-	//}
-	//_getch();
 }
 
 int Field::get_cell_value_by_indexes(int i, int j) {

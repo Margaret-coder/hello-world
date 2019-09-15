@@ -13,15 +13,19 @@ class Game
 	int temp_time;
 	char const *  action;
 	Timer timer;
+	int score;
+	bool Is_falling_figure_collision();
+	void Place_figure();
+	void Remove_previous_figure_state();
+	void Set_figure_as_a_field_part();
+	int Field_check_full_row_index();
+	void Erase_complete_row(int index);
 public:
 	void set_field(Field _game_field);
 	Field get_field();
 	Game();
 	~Game();
-	bool Is_falling_figure_collision();
-	void Place_figure();
-	void Remove_previous_figure_state();
-	void Set_figure_as_a_field_part();
+	void Update_field();
 	void StartGame();
 };
 

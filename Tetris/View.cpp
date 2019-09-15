@@ -41,7 +41,7 @@ void View::DrawField(Field game_field) {
 	//	}
 	//	cout << endl;
 	//}
-
+ 
 	array<Coord, 4> temp_figure_coord = game_field.get_figure().get_figure_coord();
 	COORD c;
 	c.X = offset.x;

@@ -43,8 +43,8 @@ void Figure::set_figure_coord(array<Coord, 4> _figure_coord) {
 void Figure::CreateFigure() {
 	srand(time(NULL));
 	srand((int)time(0));
-//	int figure_num = 1 + rand() % (7 - 1);
-	int figure_num = 5 + rand() % (5 - 1);
+	int figure_num = 1 + rand() % (7 - 1);
+//	int figure_num = 5 + rand() % (5 - 1); // упрощенный вариант
 	switch (figure_num) { // Рандомно выбираем 1 из 7 возможных фигурок
 	case 1: figure_coord = { 0, 0, 1, 0, 2, 0, 3, 0 }; break; // stick | 
 	case 2: figure_coord = { 0, 0, 1, 0, 0, 1, 1, 1 }; break; // square

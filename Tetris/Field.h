@@ -14,7 +14,7 @@ class Field
 	Coord falling_figure_left_top_point; // figure left top point related to field coordinates
 	Figure falling_figure;
 	Figure previous_falling_figure_state;
-	Figure next_figure;
+//	Figure next_figure; // для отображения следующей фигуры справа от поля
 public:
 	static int figure_counterr;
 	Field();

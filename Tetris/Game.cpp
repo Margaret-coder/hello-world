@@ -7,6 +7,7 @@ Game::Game() : game_field(), timer()
 	srand(time(NULL));
 	srand((int)time(0));
 	temp_time = 0;
+	score = 0;
 }
 
 Game::~Game()
@@ -20,10 +21,18 @@ void Game::set_field(Field _game_field) {
 Field Game::get_field() {
 	return game_field;
 }
-
+// Возвращаемся к array коордов
+// Можно забыть вызвать delete в случае исключения или досрочного возврата из функции (тоже утечка памяти).
+//Можно вызвать delete дважды (двойное удаление, double delete).
+//Можно вызвать не ту форму оператора : delete вместо delete[] или наоборот(неопределённое поведение, undefined behavior).
+//Можно использовать объект после вызова delete (dangling pointer).
+// фигура цепляется боком тоже, должна цепляться только вертикально
+// стыковка фигуры не всегда адекватна, бывает заходит на тело другой фигуры. ну и боком тоже, да
+// программа самопроизвольно закрывается, на нной фигуре
+//Тут всё просто и большинству известно, что для подобных целей в С++ следует использовать стандартный контейнер std::vector**.Он сам выделит память в конструкторе и освободит её в деструкторе.К тому же, он ещё может менять свой размер во время жизни
 bool Game::Is_falling_figure_collision() {
 	Coord figure_point;
-	array<Coord, 4>  temp_figure_coord = game_field.get_figure().get_figure_coord();
+	array<Coord, 4>  temp_figure_coord = game_field.get_figure().get_figure_coord(); // а у аррэя вообще куча встроенных функций и итераторы
 	for (int k = 0; k < temp_figure_coord.size(); k++) {
 		for (int i = 0; i < game_field.get_width(); i++)
 		{
@@ -108,6 +117,49 @@ void Game::Set_figure_as_a_field_part() {
 	}
 }
 
+int Game::Field_check_full_row_index() {
+	int counter = 0;
+	for (int j = 0; j < game_field.get_height(); j++)
+	{
+		for (int i = 0; i < game_field.get_width(); i++)
+		{
+			if (game_field.get_cell_value_by_indexes(i, j) == 2)
+			{
+				counter++;
+			}
+		}
+		if (counter == game_field.get_width()) {
+			return j;
+		}
+		else counter = 0;
+	}
+	return -1;
+}
+
+void Game::Erase_complete_row(int index) {
+	int next_row_cell_value; 
+	for (int j = index; j < game_field.get_height() - 1; j++)
+	{
+		for (int i = 0; i < game_field.get_width(); i++)
+		{
+			next_row_cell_value = game_field.get_cell_value_by_indexes(i, j + 1);
+			game_field.set_cell_value_by_indexes(next_row_cell_value, i, j);
+		}
+	}
+}
+
+void Game::Update_field() {
+	int row_index = 0;
+	Place_figure();
+	do {
+		row_index = Field_check_full_row_index(); 
+		cout << endl << row_index;
+	//	if (row_index) Erase_complete_row(row_index); // здесь творится непонятная фигня
+		// я не проверю ряды, пока не пойму, почему игра останавливается
+		// пизда. у меня утечка памяти
+	} while (row_index != -1);
+}
+
 void Game::StartGame() {
 	std::string EnumStrings[6] = { "UP", "LEFT", "RIGHT", "DOWN", "MIN", "MAX" };
 	View view(game_field);
@@ -152,7 +204,7 @@ void Game::StartGame() {
 						max_x = temp_figure_coord[i].x + game_field.get_figure_left_top_point().x;
 					}
 				}
-				if (max_x < game_field.get_width() - 2) {
+				if (max_x < game_field.get_width() - 1) {
 					game_field.Move_figure_right();
 				}
 			}
@@ -172,7 +224,7 @@ void Game::StartGame() {
 			figure.CreateFigure();
 			game_field.set_new_figure(figure);
 		}
-		Place_figure();
+		Update_field();
 		view.DrawField(game_field);
 	}
 	}
