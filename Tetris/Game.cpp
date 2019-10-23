@@ -21,7 +21,7 @@ void Game::set_field(Field _game_field) {
 Field Game::get_field() {
 	return game_field;
 }
-// Возвращаемся к array коордов
+
 // Можно забыть вызвать delete в случае исключения или досрочного возврата из функции (тоже утечка памяти).
 //Можно вызвать delete дважды (двойное удаление, double delete).
 //Можно вызвать не ту форму оператора : delete вместо delete[] или наоборот(неопределённое поведение, undefined behavior).
@@ -99,7 +99,6 @@ void Game::Remove_previous_figure_state() {
 
 void Game::Set_figure_as_a_field_part() {
 	array <Coord, 4> figure_coord = game_field.get_figure().get_figure_coord();
-	array <Coord, 4> temp_figure_on_field_state = figure_coord;
 	Coord left_top_point = game_field.get_figure_left_top_point();
 	for (int i = 0; i < game_field.get_width(); i++)
 	{
@@ -128,7 +127,7 @@ int Game::Field_check_full_row_index() {
 				counter++;
 			}
 		}
-		if (counter == game_field.get_width()) {
+		if (counter >= game_field.get_width() - 2) { // слева 1 и справа -1
 			return j;
 		}
 		else counter = 0;
@@ -137,15 +136,38 @@ int Game::Field_check_full_row_index() {
 }
 
 void Game::Erase_complete_row(int index) {
-	int next_row_cell_value; 
-	for (int j = index; j < game_field.get_height() - 1; j++)
+	int **temp_field_cells;
+	temp_field_cells = new int*[game_field.get_width()];
+	for (int i = 0; i < game_field.get_width(); i++)
+	{
+		temp_field_cells[i] = new int[game_field.get_height()];
+		for (int j = 0; j < game_field.get_height(); j++) {
+			temp_field_cells[i][j] = game_field.get_cell_value_by_indexes(i, j);
+		}
+	}
+	for (int j = 0; j < game_field.get_height() - 1; j++) // минус 1 потому что j + 1
 	{
 		for (int i = 0; i < game_field.get_width(); i++)
 		{
-			next_row_cell_value = game_field.get_cell_value_by_indexes(i, j + 1);
-			game_field.set_cell_value_by_indexes(next_row_cell_value, i, j);
+			if (j == 0)
+			{
+				game_field.set_cell_value_by_indexes(0, i, j);
+			}
+			else if (j >= index - 1)
+			{
+				if (j < game_field.get_height() - 2) {
+					game_field.set_cell_value_by_indexes(temp_field_cells[i][j], i, j + 2);
+				}
+				break;
+			}
+				game_field.set_cell_value_by_indexes(temp_field_cells[i][j], i, j + 1);
 		}
 	}
+	for (int i = 0; i < game_field.get_width(); i++)
+	{
+		delete[](temp_field_cells[i]);
+	}
+	delete[](temp_field_cells);
 }
 
 void Game::Update_field() {
@@ -166,25 +188,7 @@ void Game::StartGame() {
 	view.DrawField(game_field);
 	while (1)
 	{
-		int** game_field_cells;
-		game_field_cells = new int*[game_field.get_width()];
-		for (int i = 0; i < game_field.get_width(); i++)
-		{
-			game_field_cells[i] = new int[game_field.get_height()];
-			for (int j = 0; j < game_field.get_height(); j++) {
-				game_field_cells[i][j] = game_field.get_field_cells()[i][j];
-			}
-		}
-
-		if(timer.Elapsed().count() - temp_time > 0){
-			int max_y = game_field.get_figure_left_top_point().y;
-			array<Coord, 4>  temp_figure_coord = game_field.get_figure().get_figure_coord();
-			for (int i = 0; i < temp_figure_coord.size(); i++) {
-				if ((temp_figure_coord[i].y + game_field.get_figure_left_top_point().y) > max_y) {
-					max_y = temp_figure_coord[i].y + game_field.get_figure_left_top_point().y;
-				}
-			}
-			
+		if(timer.Elapsed().count() - temp_time > 0){			
 		temp_time = timer.Elapsed().count();
 		action = view.ViewAction(game_field);
 		if (strlen(action) > 1 ) {
@@ -192,8 +196,8 @@ void Game::StartGame() {
 			if (!strcmp(action, "UP")) { 
 				game_field.set_rotated_figure(*game_field.get_figure().Rotate_figure_up());
 			}
-			else if (!strcmp(action, "LEFT")) { 
-				if (game_field.get_figure_left_top_point().x > 1)	game_field.Move_figure_left();
+			else if (!strcmp(action, "LEFT")) { // сделать проверку на столкновение с полем (клетки 2)
+				if (game_field.get_figure_left_top_point().x > 1)	game_field.Move_figure_left(); // считаем от 1
 			}
 			else if (!strcmp(action, "RIGHT")) { 
 				view.DrawField(game_field);
@@ -204,7 +208,7 @@ void Game::StartGame() {
 						max_x = temp_figure_coord[i].x + game_field.get_figure_left_top_point().x;
 					}
 				}
-				if (max_x < game_field.get_width() - 1) {
+				if (max_x < game_field.get_width() - 1) { // считаем до ширины поля минус 1
 					game_field.Move_figure_right();
 				}
 			}

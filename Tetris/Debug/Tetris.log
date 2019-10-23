@@ -1,18 +1,10 @@
-﻿  View.cpp
-  Main.cpp
-  Game.cpp
+﻿  Game.cpp
 c:\users\margo\documents\visual studio 2015\projects\tetris\tetris\game.cpp(7): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
 c:\users\margo\documents\visual studio 2015\projects\tetris\tetris\game.cpp(36): warning C4018: '<': signed/unsigned mismatch
 c:\users\margo\documents\visual studio 2015\projects\tetris\tetris\game.cpp(69): warning C4018: '<': signed/unsigned mismatch
 c:\users\margo\documents\visual studio 2015\projects\tetris\tetris\game.cpp(87): warning C4018: '<': signed/unsigned mismatch
-c:\users\margo\documents\visual studio 2015\projects\tetris\tetris\game.cpp(108): warning C4018: '<': signed/unsigned mismatch
-c:\users\margo\documents\visual studio 2015\projects\tetris\tetris\game.cpp(182): warning C4018: '<': signed/unsigned mismatch
-c:\users\margo\documents\visual studio 2015\projects\tetris\tetris\game.cpp(188): warning C4244: '=': conversion from '__int64' to 'int', possible loss of data
-c:\users\margo\documents\visual studio 2015\projects\tetris\tetris\game.cpp(202): warning C4018: '<': signed/unsigned mismatch
-  Figure.cpp
-c:\users\margo\documents\visual studio 2015\projects\tetris\tetris\figure.cpp(44): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-  Field.cpp
-  Generating Code...
-c:\users\margo\documents\visual studio 2015\projects\tetris\tetris\view.cpp(125): warning C4715: 'View::ViewAction': not all control paths return a value
-  Tetris.vcxproj -> C:\Users\Margo\Documents\Visual Studio 2015\Projects\Tetris\Debug\Tetris.exe
-  Tetris.vcxproj -> C:\Users\Margo\Documents\Visual Studio 2015\Projects\Tetris\Debug\Tetris.pdb (Full PDB)
+c:\users\margo\documents\visual studio 2015\projects\tetris\tetris\game.cpp(107): warning C4018: '<': signed/unsigned mismatch
+c:\users\margo\documents\visual studio 2015\projects\tetris\tetris\game.cpp(200): warning C4244: '=': conversion from '__int64' to 'int', possible loss of data
+c:\users\margo\documents\visual studio 2015\projects\tetris\tetris\game.cpp(214): warning C4018: '<': signed/unsigned mismatch
+  Tetris.vcxproj -> C:\Users\Margo\documents\visual studio 2015\Projects\Tetris\Debug\Tetris.exe
+  Tetris.vcxproj -> C:\Users\Margo\documents\visual studio 2015\Projects\Tetris\Debug\Tetris.pdb (Full PDB)
