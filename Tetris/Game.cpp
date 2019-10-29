@@ -30,7 +30,7 @@ Field Game::get_field() {
 // стыковка фигуры не всегда адекватна, бывает заходит на тело другой фигуры. ну и боком тоже, да
 // программа самопроизвольно закрывается, на нной фигуре
 //Тут всё просто и большинству известно, что для подобных целей в С++ следует использовать стандартный контейнер std::vector**.Он сам выделит память в конструкторе и освободит её в деструкторе.К тому же, он ещё может менять свой размер во время жизни
-bool Game::Is_falling_figure_collision() {
+bool Game::Is_falling_figure_collision(int offset_x, int offset_y) {
 	Coord figure_point;
 	array<Coord, 4>  temp_figure_coord = game_field.get_figure().get_figure_coord(); // а у аррэя вообще куча встроенных функций и итераторы
 	for (int k = 0; k < temp_figure_coord.size(); k++) {
@@ -39,16 +39,70 @@ bool Game::Is_falling_figure_collision() {
 			for (int j = 0; j < game_field.get_height(); j++)
 			{
 				figure_point.y = temp_figure_coord[k].y + game_field.get_figure_left_top_point().y;
-				figure_point.x = temp_figure_coord[k].x + game_field.get_figure_left_top_point().x;
-				if (figure_point.y + 1 == game_field.get_height())
+				figure_point.x = temp_figure_coord[k].x + game_field.get_figure_left_top_point().x; 
+				if (figure_point.y + offset_y == game_field.get_height())
 					{
 						return true;
 					}
-				else if (((figure_point.y + 1) == j)
-					&& (game_field.get_cell_value_by_indexes(figure_point.x, figure_point.y + 1) == 2)) // МАГИЧЕСКОЕ ЧИСЛО 2 (и 1 тоже надо оформить)
+				else if (((figure_point.x + offset_x == i) && (figure_point.y + offset_y) == j)
+					&& (game_field.get_cell_value_by_indexes(figure_point.x + offset_x, figure_point.y + offset_y) == 2)) // МАГИЧЕСКОЕ ЧИСЛО 2 (и 1 тоже надо оформить)
 				{
 					return true;
 				}			
+			}
+		}
+	}
+	return false;
+}
+
+bool Game::Is_falling_figure_collision_diagonal(int offset_x, int offset_y) { // вообще он должна заскакивать вправо, вроде
+	Coord figure_point;
+	array<Coord, 4>  temp_figure_coord = game_field.get_figure().get_figure_coord(); 
+	for (int k = 0; k < temp_figure_coord.size(); k++) {
+		for (int i = 0; i < game_field.get_width(); i++)
+		{
+			for (int j = 0; j < game_field.get_height(); j++)
+			{
+				figure_point.y = temp_figure_coord[k].y + game_field.get_figure_left_top_point().y;
+				figure_point.x = temp_figure_coord[k].x + game_field.get_figure_left_top_point().x;
+				if (figure_point.y + offset_y == game_field.get_height())
+				{
+					return true;
+				}
+				else if ((offset_y > 0 && offset_x != 0) && ((figure_point.x + offset_x == i) && (figure_point.y + offset_y) == j)
+					&& (game_field.get_cell_value_by_indexes(figure_point.x + offset_x, figure_point.y + offset_y) == 2)
+					&& (game_field.get_cell_value_by_indexes(figure_point.x + offset_x, figure_point.y) != 2))
+				{
+					return true;
+				}
+			}
+		}
+	}
+	return false;
+}
+
+	
+
+bool Game::Is_falling_figure_collision_by_side_only(int offset_x) {
+	Coord figure_point;
+	array<Coord, 4>  temp_figure_coord = game_field.get_figure().get_figure_coord();
+	for (int k = 0; k < temp_figure_coord.size(); k++) {
+		for (int i = 0; i < game_field.get_width(); i++)
+		{
+			for (int j = 0; j < game_field.get_height(); j++)
+			{
+				figure_point.y = temp_figure_coord[k].y + game_field.get_figure_left_top_point().y;
+				figure_point.x = temp_figure_coord[k].x + game_field.get_figure_left_top_point().x;
+				if (figure_point.y + offset_x == 0 && figure_point.y + offset_x == game_field.get_width())
+				{
+					return true;
+				}
+				else if (((offset_x != 0) && (figure_point.x + offset_x == i) && (figure_point.y) == j)
+					&& (game_field.get_cell_value_by_indexes(figure_point.x + offset_x, figure_point.y) == 2)
+					&& (game_field.get_cell_value_by_indexes(figure_point.x + offset_x, figure_point.y + 1) == 2)) // МАГИЧЕСКОЕ ЧИСЛО 2 (и 1 тоже надо оформить)
+				{
+					return true;
+				}
 			}
 		}
 	}
@@ -135,7 +189,7 @@ int Game::Field_check_full_row_index() {
 	return -1;
 }
 
-void Game::Erase_complete_row(int index) {
+void Game::Erase_complete_row(int index) { // вот здесь надо поработать
 	int **temp_field_cells;
 	temp_field_cells = new int*[game_field.get_width()];
 	for (int i = 0; i < game_field.get_width(); i++)
@@ -170,24 +224,26 @@ void Game::Erase_complete_row(int index) {
 	delete[](temp_field_cells);
 }
 
+
 void Game::Update_field() {
 	int row_index = 0;
 	Place_figure();
-	do {
-		row_index = Field_check_full_row_index(); 
-		cout << endl << row_index;
-	//	if (row_index) Erase_complete_row(row_index); // здесь творится непонятная фигня
-		// я не проверю ряды, пока не пойму, почему игра останавливается
-		// пизда. у меня утечка памяти
-	} while (row_index != -1);
+	row_index = Field_check_full_row_index();
+//	Erase_complete_row(row_index); // Erase_complete_row нужно доработать
+//дает первый сверху индекс ряда. Нужно взрывать и апдейтить поле, затем снова проверять на полную строку
+	if (row_index != -1) cout << endl << row_index; 
 }
 
 void Game::StartGame() {
+	int movement_offset_x;
+	int falling_offset_y;
 	std::string EnumStrings[6] = { "UP", "LEFT", "RIGHT", "DOWN", "MIN", "MAX" };
 	View view(game_field);
 	view.DrawField(game_field);
 	while (1)
 	{
+		movement_offset_x = 0;
+		falling_offset_y = 0;
 		if(timer.Elapsed().count() - temp_time > 0){			
 		temp_time = timer.Elapsed().count();
 		action = view.ViewAction(game_field);
@@ -197,7 +253,10 @@ void Game::StartGame() {
 				game_field.set_rotated_figure(*game_field.get_figure().Rotate_figure_up());
 			}
 			else if (!strcmp(action, "LEFT")) { // сделать проверку на столкновение с полем (клетки 2)
-				if (game_field.get_figure_left_top_point().x > 1)	game_field.Move_figure_left(); // считаем от 1
+				if (game_field.get_figure_left_top_point().x > 1) { // считаем от 1
+				//	game_field.Move_figure_left(); 
+					movement_offset_x = -1;
+				}
 			}
 			else if (!strcmp(action, "RIGHT")) { 
 				view.DrawField(game_field);
@@ -209,17 +268,29 @@ void Game::StartGame() {
 					}
 				}
 				if (max_x < game_field.get_width() - 1) { // считаем до ширины поля минус 1
-					game_field.Move_figure_right();
+					//game_field.Move_figure_right();
+					movement_offset_x = 1;
 				}
 			}
 			else if (!strcmp(action, "DOWN")) { 
 				game_field.set_rotated_figure(*game_field.get_figure().Rotate_figure_down());				
 			}
 		}
+		// для того чтобы фигура не влипала в стену наваленных фигур, а падала нормально вниз, проверка:
+		if (Is_falling_figure_collision_by_side_only(movement_offset_x))
+		{
+			movement_offset_x = 0;
+		}
 
 		// падение фигуры
-		if (Is_falling_figure_collision() == false) {
-				game_field.Falling_figure(); // change figure coordinates by Y
+		falling_offset_y = 1;
+		if (Is_falling_figure_collision_diagonal(movement_offset_x, falling_offset_y))
+		{
+			movement_offset_x = 0;
+		}
+		if (Is_falling_figure_collision(movement_offset_x, falling_offset_y) == false) {
+				game_field.Move_figure_by_offset(movement_offset_x, falling_offset_y); // change figure coordinates
+				// фигура почему-то не двигается
 				Remove_previous_figure_state();
 			}
 		// set figure as a field part by not removing it's previous state

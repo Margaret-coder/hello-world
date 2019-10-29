@@ -27,7 +27,7 @@ Field::Field()
 		}
 	}
 	falling_figure_left_top_point.x = width / 2 - 1;
-	falling_figure_left_top_point.y = 1;
+	falling_figure_left_top_point.y = 0;
 }
 
 Field::Field(int _width, int _height)
@@ -154,15 +154,7 @@ Field Field::get_field() {
 	return *this;
 }
 
-void Field::Falling_figure() {
-	falling_figure_left_top_point.y++;
+void Field::Move_figure_by_offset(int offset_x, int offset_y) {
+	falling_figure_left_top_point.x = falling_figure_left_top_point.x + offset_x;
+	falling_figure_left_top_point.y = falling_figure_left_top_point.y + offset_y;
 }
-
-void Field::Move_figure_left() {
-	falling_figure_left_top_point.x--;
-}
-
-void Field::Move_figure_right() {
-	falling_figure_left_top_point.x++;
-}
-

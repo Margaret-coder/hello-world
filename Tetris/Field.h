@@ -37,8 +37,6 @@ public:
 	Field get_field();
 	int get_width();
 	int get_height();
-	void Move_figure_left();
-	void Move_figure_right();
-	void Falling_figure();
+	void Move_figure_by_offset(int offset_x, int offset_y);
 };
 
