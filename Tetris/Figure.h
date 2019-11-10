@@ -17,6 +17,7 @@ class Figure
 public:
 
 	Figure();
+	Figure(const Figure &figure);
 	~Figure();
 	array<Coord, 4> get_figure_coord();
 	void set_figure_coord(array<Coord, 4> _figure_coord);

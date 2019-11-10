@@ -104,6 +104,10 @@ void Field::set_previous_figure_state_on_field(array<Coord, 4> _figure_coord) {
 	previous_falling_figure_state.set_figure_coord(_figure_coord);
 }
 
+void Field::set_falling_figure_state_on_field(array<Coord, 4> _figure_coord) {
+	falling_figure.set_figure_coord(_figure_coord);
+}
+
 Figure Field::get_previous_figure_state() {
 	return previous_falling_figure_state;
 }

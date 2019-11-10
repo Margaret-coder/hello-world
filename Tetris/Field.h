@@ -26,6 +26,7 @@ public:
 	void set_rotated_figure(Figure f);
 	Figure get_figure();
 	void set_previous_figure_state_on_field(array<Coord, 4> _figure_coord);
+	void set_falling_figure_state_on_field(array<Coord, 4> _figure_coord);
 	Figure get_previous_figure_state();
 	void set_figure_left_top_point(Coord c);
 	void set_figure_left_top_point_to_zero();

@@ -20,6 +20,17 @@ Figure::Figure()
 	CreateFigure();
 }
 
+Figure::Figure(const Figure &figure)
+{
+	figure_coord = figure.figure_coord;
+	figure_left_top_point = figure.figure_left_top_point;
+	maxx = figure.maxx;
+	maxy = figure.maxy;
+	minx = figure.minx;
+	miny = figure.miny;
+	dif = figure.dif;
+}
+
 Figure::~Figure()
 {
 }

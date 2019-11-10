@@ -31,6 +31,7 @@ Field Game::get_field() {
 // программа самопроизвольно закрывается, на нной фигуре
 //Тут всё просто и большинству известно, что для подобных целей в С++ следует использовать стандартный контейнер std::vector**.Он сам выделит память в конструкторе и освободит её в деструкторе.К тому же, он ещё может менять свой размер во время жизни
 bool Game::Is_falling_figure_collision(int offset_x, int offset_y) {
+	// если дном не удраятеся, а ударяется только торцом то сделать проверку, чтобы фигура в бок не залипала
 	Coord figure_point;
 	array<Coord, 4>  temp_figure_coord = game_field.get_figure().get_figure_coord(); // а у аррэя вообще куча встроенных функций и итераторы
 	for (int k = 0; k < temp_figure_coord.size(); k++) {
@@ -55,8 +56,14 @@ bool Game::Is_falling_figure_collision(int offset_x, int offset_y) {
 	return false;
 }
 
+bool Game::Check_rotatable_figure_state() {
+
+	return false;
+}
+
 bool Game::Is_falling_figure_collision_diagonal(int offset_x, int offset_y) { // вообще он должна заскакивать вправо, вроде
 	Coord figure_point;
+	int counter = 0;
 	array<Coord, 4>  temp_figure_coord = game_field.get_figure().get_figure_coord(); 
 	for (int k = 0; k < temp_figure_coord.size(); k++) {
 		for (int i = 0; i < game_field.get_width(); i++)
@@ -65,14 +72,11 @@ bool Game::Is_falling_figure_collision_diagonal(int offset_x, int offset_y) { //
 			{
 				figure_point.y = temp_figure_coord[k].y + game_field.get_figure_left_top_point().y;
 				figure_point.x = temp_figure_coord[k].x + game_field.get_figure_left_top_point().x;
-				if (figure_point.y + offset_y == game_field.get_height())
-				{
-					return true;
-				}
-				else if ((offset_y > 0 && offset_x != 0) && ((figure_point.x + offset_x == i) && (figure_point.y + offset_y) == j)
+				if ((offset_y > 0 && offset_x != 0) && ((figure_point.x + offset_x == i) && (figure_point.y + offset_y) == j)
 					&& (game_field.get_cell_value_by_indexes(figure_point.x + offset_x, figure_point.y + offset_y) == 2)
 					&& (game_field.get_cell_value_by_indexes(figure_point.x + offset_x, figure_point.y) != 2))
 				{
+					counter++;
 					return true;
 				}
 			}
@@ -80,10 +84,10 @@ bool Game::Is_falling_figure_collision_diagonal(int offset_x, int offset_y) { //
 	}
 	return false;
 }
-
 	
 
-bool Game::Is_falling_figure_collision_by_side_only(int offset_x) {
+// ну и чем эта функция отличается от функции обычной, и зачем отдельно проверка на диагональ?
+bool Game::Is_falling_figure_collision_by_side_only(int offset_x, int hypo_offset_y = 1) {
 	Coord figure_point;
 	array<Coord, 4>  temp_figure_coord = game_field.get_figure().get_figure_coord();
 	for (int k = 0; k < temp_figure_coord.size(); k++) {
@@ -93,13 +97,16 @@ bool Game::Is_falling_figure_collision_by_side_only(int offset_x) {
 			{
 				figure_point.y = temp_figure_coord[k].y + game_field.get_figure_left_top_point().y;
 				figure_point.x = temp_figure_coord[k].x + game_field.get_figure_left_top_point().x;
-				if (figure_point.y + offset_x == 0 && figure_point.y + offset_x == game_field.get_width())
+				if (figure_point.x + offset_x == 0 || figure_point.x + offset_x == game_field.get_width())
 				{
 					return true;
 				}
-				else if (((offset_x != 0) && (figure_point.x + offset_x == i) && (figure_point.y) == j)
-					&& (game_field.get_cell_value_by_indexes(figure_point.x + offset_x, figure_point.y) == 2)
-					&& (game_field.get_cell_value_by_indexes(figure_point.x + offset_x, figure_point.y + 1) == 2)) // МАГИЧЕСКОЕ ЧИСЛО 2 (и 1 тоже надо оформить)
+				else if (((figure_point.x + offset_x == i) && (figure_point.y) == j)
+					&& ((game_field.get_cell_value_by_indexes(figure_point.x + offset_x, figure_point.y) == 2)) 
+						// если движение влево вправо заблокировано и если то же со смещением вниз заблокировано
+					|| 
+					(((figure_point.x + offset_x == i) && (figure_point.y + hypo_offset_y) == j) &&
+					(game_field.get_cell_value_by_indexes(figure_point.x + offset_x, figure_point.y + hypo_offset_y) == 2))) // МАГИЧЕСКОЕ ЧИСЛО 2 (и 1 тоже надо оформить)
 				{
 					return true;
 				}
@@ -246,56 +253,51 @@ void Game::StartGame() {
 		falling_offset_y = 0;
 		if(timer.Elapsed().count() - temp_time > 0){			
 		temp_time = timer.Elapsed().count();
-		action = view.ViewAction(game_field);
-		if (strlen(action) > 1 ) {
-			// перемещения координат фигуры в поле по keyboard interaction
-			if (!strcmp(action, "UP")) { 
-				game_field.set_rotated_figure(*game_field.get_figure().Rotate_figure_up());
-			}
-			else if (!strcmp(action, "LEFT")) { // сделать проверку на столкновение с полем (клетки 2)
-				if (game_field.get_figure_left_top_point().x > 1) { // считаем от 1
-				//	game_field.Move_figure_left(); 
-					movement_offset_x = -1;
-				}
-			}
-			else if (!strcmp(action, "RIGHT")) { 
-				view.DrawField(game_field);
-				int max_x = game_field.get_figure_left_top_point().x;
-				array<Coord, 4>  temp_figure_coord = game_field.get_figure().get_figure_coord();
-				for (int i = 0; i < temp_figure_coord.size(); i++) {
-					if ((temp_figure_coord[i].x + game_field.get_figure_left_top_point().x) > max_x) {
-						max_x = temp_figure_coord[i].x + game_field.get_figure_left_top_point().x;
-					}
-				}
-				if (max_x < game_field.get_width() - 1) { // считаем до ширины поля минус 1
-					//game_field.Move_figure_right();
-					movement_offset_x = 1;
-				}
-			}
-			else if (!strcmp(action, "DOWN")) { 
-				game_field.set_rotated_figure(*game_field.get_figure().Rotate_figure_down());				
-			}
-		}
-		// для того чтобы фигура не влипала в стену наваленных фигур, а падала нормально вниз, проверка:
-		if (Is_falling_figure_collision_by_side_only(movement_offset_x))
-		{
-			movement_offset_x = 0;
-		}
 
 		// падение фигуры
 		falling_offset_y = 1;
-		if (Is_falling_figure_collision_diagonal(movement_offset_x, falling_offset_y))
-		{
-			movement_offset_x = 0;
+
+		action = view.ViewAction(game_field);
+		if (strlen(action) > 1 ) {
+			// проверка на разворот фигуры, чтобы было место развернуться
+			// перемещения координат фигуры в поле по keyboard interaction
+			if (!strcmp(action, "UP")) { 
+				Figure temp_figure = game_field.get_figure();
+				game_field.set_rotated_figure(*game_field.get_figure().Rotate_figure_up());
+				if (Is_falling_figure_collision(movement_offset_x, falling_offset_y) == true) {
+					game_field.set_rotated_figure(temp_figure);
+				}
+			}
+			else if (!strcmp(action, "LEFT")) { // здесь же проверка на диагональ
+					movement_offset_x = -1;
+					if (Is_falling_figure_collision_by_side_only(movement_offset_x, falling_offset_y))
+					{
+						movement_offset_x = 0;
+					}
+			}
+			else if (!strcmp(action, "RIGHT")) { 
+					movement_offset_x = 1;
+					if (Is_falling_figure_collision_by_side_only(movement_offset_x, falling_offset_y))
+					{
+						movement_offset_x = 0;
+					}
+			}
+			else if (!strcmp(action, "DOWN")) { 
+				array <Coord, 4> before_rotation_figure_coord = game_field.get_figure().get_figure_coord();
+				game_field.set_rotated_figure(*game_field.get_figure().Rotate_figure_down());	
+				if (Is_falling_figure_collision(movement_offset_x, falling_offset_y) == true) {
+					game_field.get_figure().set_figure_coord(before_rotation_figure_coord);
+				}
+			}
 		}
+
 		if (Is_falling_figure_collision(movement_offset_x, falling_offset_y) == false) {
 				game_field.Move_figure_by_offset(movement_offset_x, falling_offset_y); // change figure coordinates
-				// фигура почему-то не двигается
 				Remove_previous_figure_state();
 			}
-		// set figure as a field part by not removing it's previous state
 		else {
 			Set_figure_as_a_field_part();
+
 			figure.CreateFigure();
 			game_field.set_new_figure(figure);
 		}
