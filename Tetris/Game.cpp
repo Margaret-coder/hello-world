@@ -181,6 +181,7 @@ int Game::Field_check_full_row_index() {
 	int counter = 0;
 	for (int j = 0; j < game_field.get_height(); j++)
 	{
+		counter = 0;
 		for (int i = 0; i < game_field.get_width(); i++)
 		{
 			if (game_field.get_cell_value_by_indexes(i, j) == 2)
@@ -188,10 +189,9 @@ int Game::Field_check_full_row_index() {
 				counter++;
 			}
 		}
-		if (counter >= game_field.get_width() - 2) { // слева 1 и справа -1
+		if (counter > game_field.get_width() - 2) { // слева 1 и справа -1
 			return j;
 		}
-		else counter = 0;
 	}
 	return -1;
 }
@@ -206,7 +206,7 @@ void Game::Erase_complete_row(int index) { // вот здесь надо поработать
 			temp_field_cells[i][j] = game_field.get_cell_value_by_indexes(i, j);
 		}
 	}
-	for (int j = 0; j < game_field.get_height() - 1; j++) // минус 1 потому что j + 1
+	for (int j = 0; j < game_field.get_height() - 2; j++) // минус 2 потому что j + 2
 	{
 		for (int i = 0; i < game_field.get_width(); i++)
 		{
@@ -214,14 +214,13 @@ void Game::Erase_complete_row(int index) { // вот здесь надо поработать
 			{
 				game_field.set_cell_value_by_indexes(0, i, j);
 			}
-			else if (j >= index - 1)
-			{
-				if (j < game_field.get_height() - 2) {
-					game_field.set_cell_value_by_indexes(temp_field_cells[i][j], i, j + 2);
-				}
-				break;
-			}
+			else if (j < index - 1) {
 				game_field.set_cell_value_by_indexes(temp_field_cells[i][j], i, j + 1);
+			}
+			else if (j >= index)
+			{
+				game_field.set_cell_value_by_indexes(temp_field_cells[i][j], i, j + 2); 
+			}			
 		}
 	}
 	for (int i = 0; i < game_field.get_width(); i++)
@@ -233,12 +232,15 @@ void Game::Erase_complete_row(int index) { // вот здесь надо поработать
 
 
 void Game::Update_field() {
-	int row_index = 0;
-	Place_figure();
-	row_index = Field_check_full_row_index();
+//	Place_figure();
+	int row_index = Field_check_full_row_index();
 //	Erase_complete_row(row_index); // Erase_complete_row нужно доработать
 //дает первый сверху индекс ряда. Нужно взрывать и апдейтить поле, затем снова проверять на полную строку
-	if (row_index != -1) cout << endl << row_index; 
+	if (row_index != -1) {
+		cout << endl << row_index; 
+		Erase_complete_row(row_index);
+		row_index = -1;		
+	}
 }
 
 void Game::StartGame() {
@@ -297,11 +299,11 @@ void Game::StartGame() {
 			}
 		else {
 			Set_figure_as_a_field_part();
-
+			Update_field();
 			figure.CreateFigure();
 			game_field.set_new_figure(figure);
 		}
-		Update_field();
+		Place_figure();
 		view.DrawField(game_field);
 	}
 	}

@@ -33,14 +33,14 @@ void View::DrawField(Field game_field) {
 			game_field_cells[i][j] = game_field.get_field_cells()[i][j];
 		}
 	}
-	//for (int i = 0; i < game_field.get_width(); i++)
-	//{
-	//	
-	//	for (int j = 0; j < game_field.get_height(); j++) {
-	//		cout << game_field_cells[j][i] << ' ';
-	//	}
-	//	cout << endl;
-	//}
+	for (int i = 0; i < game_field.get_width(); i++)
+	{
+		
+		for (int j = 0; j < game_field.get_height(); j++) {
+			cout << game_field_cells[j][i] << ' ';
+		}
+		cout << endl;
+	}
  
 	array<Coord, 4> temp_figure_coord = game_field.get_figure().get_figure_coord();
 	COORD c;
@@ -48,7 +48,7 @@ void View::DrawField(Field game_field) {
 	c.Y = offset.y;
 	int width = game_field.get_width();
 	int height = game_field.get_height();
-	int i = 0, j = 0, num = 1;
+	int i = 0, j = 0, num = 0;
 	SetConsoleCursorPosition(hOut_, c);
 	SetConsoleTextAttribute(hOut_, BACKGROUND_BLUE | BACKGROUND_GREEN);
 	while (i <= height)
@@ -78,7 +78,7 @@ void View::DrawField(Field game_field) {
 		cout << '\n';
 		++i;
 	}
-	num = 1;
+	num = 0;
 	c.X++;
 	c.Y++;
 	SetConsoleTextAttribute(hOut_, BACKGROUND_GREEN | BACKGROUND_BLUE | BACKGROUND_RED);
@@ -94,15 +94,7 @@ void View::DrawField(Field game_field) {
 }
 
 const char* View::ViewAction(Field game_field) {
-	 int** game_field_cells = game_field.get_field_cells();
-	 //for (int i = 0; i < game_field.get_width(); i++) 
-	 //{
-	 //	for (int j = 0; j < game_field.get_height(); j++) {
-	 //		cout << game_field.get_field_cells()[i][j] << ' ';
-	 //	}
-	 //	cout << endl;
-	 //}
-	 //_getch();
+	int** game_field_cells = game_field.get_field_cells();
 	char const *  str = "";
 	if (_kbhit()) {
 		keyboard_key = _getch();
