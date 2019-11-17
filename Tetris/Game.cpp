@@ -87,26 +87,23 @@ bool Game::Is_falling_figure_collision_diagonal(int offset_x, int offset_y) { //
 	
 
 // ну и чем эта функция отличается от функции обычной, и зачем отдельно проверка на диагональ?
-bool Game::Is_falling_figure_collision_by_side_only(int offset_x, int hypo_offset_y = 1) {
-	Coord figure_point;
+bool Game::Is_falling_figure_collision_by_side_only(int offset_x, int offset_y) {
+	Coord next_figure_point;
 	array<Coord, 4>  temp_figure_coord = game_field.get_figure().get_figure_coord();
 	for (int k = 0; k < temp_figure_coord.size(); k++) {
 		for (int i = 0; i < game_field.get_width(); i++)
 		{
 			for (int j = 0; j < game_field.get_height(); j++)
 			{
-				figure_point.y = temp_figure_coord[k].y + game_field.get_figure_left_top_point().y;
-				figure_point.x = temp_figure_coord[k].x + game_field.get_figure_left_top_point().x;
-				if (figure_point.x + offset_x == 0 || figure_point.x + offset_x == game_field.get_width())
+				next_figure_point.y = temp_figure_coord[k].y + game_field.get_figure_left_top_point().y + offset_y;
+				next_figure_point.x = temp_figure_coord[k].x + game_field.get_figure_left_top_point().x + offset_x;
+				if (next_figure_point.x == 0 || next_figure_point.x == game_field.get_width())
 				{
 					return true;
 				}
-				else if (((figure_point.x + offset_x == i) && (figure_point.y) == j)
-					&& ((game_field.get_cell_value_by_indexes(figure_point.x + offset_x, figure_point.y) == 2)) 
-						// если движение влево вправо заблокировано и если то же со смещением вниз заблокировано
-					|| 
-					(((figure_point.x + offset_x == i) && (figure_point.y + hypo_offset_y) == j) &&
-					(game_field.get_cell_value_by_indexes(figure_point.x + offset_x, figure_point.y + hypo_offset_y) == 2))) // МАГИЧЕСКОЕ ЧИСЛО 2 (и 1 тоже надо оформить)
+				else if (((next_figure_point.x == i) && (next_figure_point.y) == j)
+					&& ((game_field.get_cell_value_by_indexes(next_figure_point.x, next_figure_point.y) == 2)))
+				 // МАГИЧЕСКИЕ ЧИСЛА 2 и 1 тоже надо оформить
 				{
 					return true;
 				}
@@ -267,7 +264,8 @@ void Game::StartGame() {
 					game_field.set_rotated_figure(temp_figure);
 				}
 			}
-			else if (!strcmp(action, "LEFT")) { // здесь же проверка на диагональ
+			// впиливается по диагонали. Включить в основную проверку
+			else if (!strcmp(action, "LEFT")) {
 					movement_offset_x = -1;
 					if (Is_falling_figure_collision_by_side_only(movement_offset_x, falling_offset_y))
 					{

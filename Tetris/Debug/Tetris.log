@@ -3,9 +3,12 @@ c:\users\margo\documents\visual studio 2015\projects\tetris\tetris\game.cpp(7): 
 c:\users\margo\documents\visual studio 2015\projects\tetris\tetris\game.cpp(37): warning C4018: '<': signed/unsigned mismatch
 c:\users\margo\documents\visual studio 2015\projects\tetris\tetris\game.cpp(68): warning C4018: '<': signed/unsigned mismatch
 c:\users\margo\documents\visual studio 2015\projects\tetris\tetris\game.cpp(93): warning C4018: '<': signed/unsigned mismatch
-c:\users\margo\documents\visual studio 2015\projects\tetris\tetris\game.cpp(130): warning C4018: '<': signed/unsigned mismatch
-c:\users\margo\documents\visual studio 2015\projects\tetris\tetris\game.cpp(148): warning C4018: '<': signed/unsigned mismatch
-c:\users\margo\documents\visual studio 2015\projects\tetris\tetris\game.cpp(168): warning C4018: '<': signed/unsigned mismatch
-c:\users\margo\documents\visual studio 2015\projects\tetris\tetris\game.cpp(258): warning C4244: '=': conversion from '__int64' to 'int', possible loss of data
-  Tetris.vcxproj -> C:\Users\Margo\documents\visual studio 2015\Projects\Tetris\Debug\Tetris.exe
-  Tetris.vcxproj -> C:\Users\Margo\documents\visual studio 2015\Projects\Tetris\Debug\Tetris.pdb (Full PDB)
+c:\users\margo\documents\visual studio 2015\projects\tetris\tetris\game.cpp(127): warning C4018: '<': signed/unsigned mismatch
+c:\users\margo\documents\visual studio 2015\projects\tetris\tetris\game.cpp(145): warning C4018: '<': signed/unsigned mismatch
+c:\users\margo\documents\visual studio 2015\projects\tetris\tetris\game.cpp(165): warning C4018: '<': signed/unsigned mismatch
+c:\users\margo\documents\visual studio 2015\projects\tetris\tetris\game.cpp(251): warning C4244: '=': conversion from '__int64' to 'int', possible loss of data
+  Generating Code...
+  Skipping... (no relevant changes detected)
+  Main.cpp
+  Tetris.vcxproj -> C:\Users\Margo\Documents\Visual Studio 2015\Projects\Tetris\Debug\Tetris.exe
+  Tetris.vcxproj -> C:\Users\Margo\Documents\Visual Studio 2015\Projects\Tetris\Debug\Tetris.pdb (Full PDB)

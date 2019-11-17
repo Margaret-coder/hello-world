@@ -17,7 +17,7 @@ class Game
 	bool Check_rotatable_figure_state();
 	bool Is_falling_figure_collision(int offset_x, int offset_y);
 	bool Is_falling_figure_collision_diagonal(int offset_x, int offset_y);
-	bool Is_falling_figure_collision_by_side_only(int offset_x, int hypo_offset_y);
+	bool Is_falling_figure_collision_by_side_only(int offset_x, int offset_y);
 	void Place_figure();
 	void Remove_previous_figure_state();
 	void Set_figure_as_a_field_part();
