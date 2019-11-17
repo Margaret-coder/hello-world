@@ -232,14 +232,11 @@ void Game::Erase_complete_row(int index) { // вот здесь надо поработать
 
 
 void Game::Update_field() {
-//	Place_figure();
 	int row_index = Field_check_full_row_index();
-//	Erase_complete_row(row_index); // Erase_complete_row нужно доработать
-//дает первый сверху индекс р€да. Ќужно взрывать и апдейтить поле, затем снова провер€ть на полную строку
-	if (row_index != -1) {
+	while (row_index != -1) {
 		cout << endl << row_index; 
 		Erase_complete_row(row_index);
-		row_index = -1;		
+		row_index = Field_check_full_row_index();
 	}
 }
 
