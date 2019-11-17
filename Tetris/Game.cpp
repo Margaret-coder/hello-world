@@ -206,20 +206,20 @@ void Game::Erase_complete_row(int index) { // вот здесь надо поработать
 			temp_field_cells[i][j] = game_field.get_cell_value_by_indexes(i, j);
 		}
 	}
-	for (int j = 0; j < game_field.get_height() - 2; j++) // минус 2 потому что j + 2
+	for (int i = 0; i < game_field.get_width(); i++)
 	{
-		for (int i = 0; i < game_field.get_width(); i++)
+	for (int j = 0; j < game_field.get_height(); j++)
 		{
 			if (j == 0)
 			{
 				game_field.set_cell_value_by_indexes(0, i, j);
 			}
-			else if (j < index - 1) {
-				game_field.set_cell_value_by_indexes(temp_field_cells[i][j], i, j + 1);
+			else if (j <= index) {
+				game_field.set_cell_value_by_indexes(temp_field_cells[i][j - 1], i, j);
 			}
-			else if (j >= index)
+			else if (j > index && j + 1 < game_field.get_height())
 			{
-				game_field.set_cell_value_by_indexes(temp_field_cells[i][j], i, j + 2); 
+				game_field.set_cell_value_by_indexes(temp_field_cells[i][j + 1], i, j); 
 			}			
 		}
 	}

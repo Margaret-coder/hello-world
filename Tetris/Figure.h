@@ -15,7 +15,6 @@ class Figure
 	map <string, int> shapes;
 	int maxx, maxy, minx, miny, dif;
 public:
-
 	Figure();
 	Figure(const Figure &figure);
 	~Figure();

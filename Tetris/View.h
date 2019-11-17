@@ -26,8 +26,9 @@ public:
 	View();
 	View(Field game_field);
 	View::~View();
-	void DrawField(Field game_field);
-	void DisplayFigure(Field &game_field);
-	const char* ViewAction(Field game_field);
+//	void DrawField(Field const &game_field); лучше по ссылке
+//	const char* ViewAction(Field const &game_field);
+	void DrawField(Field const game_field);
+	const char* ViewAction(Field const game_field);
 };
 

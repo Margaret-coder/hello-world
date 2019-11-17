@@ -37,22 +37,26 @@ Field::Field(int _width, int _height)
 	falling_figure_left_top_point.x = width / 2 - 1;
 }
 
-// Copy constructor - не работает. У меня тут пробел в знаниях
-Field::Field(const Field& f)
+// Copy constructor - не работает. У меня тут пробел в знаниях. Еще бы, ты еще фигура скопируй, и слона и мамонта, и все что туда засунула, умная женщина
+Field::Field(const Field& _field)
 {
-	width = f.width;
-	height = f.height;
+	width = _field.width;
+	height = _field.height;
 
 	field_cells = new int*[width];
 
-	for (int i = 0; i < f.width; i++)
+	for (int i = 0; i < width; i++)
 	{
 		field_cells[i] = new int[height];
-		for (int j = 0; j < f.height; j++)
+		for (int j = 0; j < height; j++)
 		{
-			field_cells[i][j] = f.field_cells[i][j];
+			field_cells[i][j] = _field.field_cells[i][j];
 		}
 	}
+    falling_figure_left_top_point.x = _field.falling_figure_left_top_point.x;
+	falling_figure_left_top_point.y = _field.falling_figure_left_top_point.y;
+	falling_figure = _field.falling_figure; // а что там наш конструктор копирования фигуры? вроде норм, там stl эррэй 
+	previous_falling_figure_state = _field.previous_falling_figure_state;
 }
 
 Field& Field:: operator=(Field const& f) { // тоже какая-то фигня
@@ -122,7 +126,7 @@ void Field::set_figure_left_top_point_to_zero() {
 	falling_figure_left_top_point.y = 0;
 }
 
-Coord Field::get_figure_left_top_point() {
+const Coord Field::get_figure_left_top_point() {
 	return falling_figure_left_top_point;
 }
 

@@ -30,7 +30,7 @@ public:
 	Figure get_previous_figure_state();
 	void set_figure_left_top_point(Coord c);
 	void set_figure_left_top_point_to_zero();
-	Coord get_figure_left_top_point();
+	const Coord get_figure_left_top_point();
 	int** get_field_cells();
 	void set_field_cells(int** _field_cells);
 	int get_cell_value_by_indexes(int i, int j);
