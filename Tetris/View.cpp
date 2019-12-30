@@ -31,8 +31,6 @@ void View::DrawField(Field game_field) {
 	int width = game_field.get_width();
 	int height = game_field.get_height();
 	int num = 0;
-	SetConsoleCursorPosition(hOut_, c);
-	SetConsoleTextAttribute(hOut_, BACKGROUND_BLUE | BACKGROUND_GREEN);
 	for (int i = 0; i <= width; i++)
 	{
 		c.Y = i + offset.y;
@@ -70,22 +68,33 @@ void View::DrawField(Field game_field) {
 	SetConsoleCursorPosition(hOut_, c);
 	for (int j = 0; j < width/2; ++j)
 		cout << num++ << "  ";
+
+
+	SetConsoleTextAttribute(hOut_, BACKGROUND_BLUE | BACKGROUND_GREEN | FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN);
+	for (int i = 0; i < game_field.get_next_figure().get_figure_fraction_size(); i++) {
+		c.X = offset.x * 2 + game_field.get_width() + game_field.get_next_figure().get_figure_coord()[i].x;
+		c.Y = offset.y + game_field.get_next_figure().get_figure_coord()[i].y;
+		SetConsoleCursorPosition(hOut_, c);
+		cout << "*";
+	}
+	// «ј ќћћћ»“№—я
+// рисуем следующую фигуру
 }
 
 const char* View::ViewAction(Field game_field) { // работает конструктор копировани€
-	for (int j = 0; j < game_field.get_width(); j++)
-	{
-		cout << endl;
-			for (int i = 0; i < game_field.get_height(); i++) // почему фигура падает вправо, а не вниз?
-			{
-			cout << game_field.get_cell_value_by_indexes(i, j);
-			cout << " ";
-		}
-	}
-	cout << endl;
-	cout << "x = " << game_field.get_figure_left_top_point().x;
-	cout << " ";
-	cout << "y = " << game_field.get_figure_left_top_point().y;
+	//for (int j = 0; j < game_field.get_width(); j++)
+	//{
+	//	cout << endl;
+	//		for (int i = 0; i < game_field.get_height(); i++) // почему фигура падает вправо, а не вниз?
+	//		{
+	//		cout << game_field.get_cell_value_by_indexes(i, j);
+	//		cout << " ";
+	//	}
+	//}
+	//cout << endl;
+	//cout << "x = " << game_field.get_figure_left_top_point().x;
+	//cout << " ";
+	//cout << "y = " << game_field.get_figure_left_top_point().y;
 	char const *  str = "";
 	if (_kbhit()) {
 		keyboard_key = _getch();

@@ -37,7 +37,6 @@ Field::Field(int _width, int _height)
 	falling_figure_left_top_point.x = width / 2 - 1;
 }
 
-// Copy constructor - не работает. У меня тут пробел в знаниях. Еще бы, ты еще фигура скопируй, и слона и мамонта, и все что туда засунула, умная женщина
 Field::Field(const Field& _field)
 {
 	width = _field.width;
@@ -55,7 +54,8 @@ Field::Field(const Field& _field)
 	}
     falling_figure_left_top_point.x = _field.falling_figure_left_top_point.x;
 	falling_figure_left_top_point.y = _field.falling_figure_left_top_point.y;
-	falling_figure = _field.falling_figure; // а что там наш конструктор копирования фигуры? вроде норм, там stl эррэй 
+	falling_figure = _field.falling_figure; 
+
 	previous_falling_figure_state = _field.previous_falling_figure_state;
 }
 
@@ -87,7 +87,12 @@ Field::~Field()
 
 void Field:: set_new_figure(Figure f) {
 //	cout << endl << figure_counterr++;
-	falling_figure = f;
+	falling_figure.set_figure_coord(f.get_figure_coord());
+	falling_figure.set_diff(f.get_diff());
+	falling_figure.set_maxX(f.get_maxX());
+	falling_figure.set_maxY(f.get_maxY());
+	falling_figure.set_minX(f.get_minX());
+	falling_figure.set_minY(f.get_minY());
 	falling_figure_left_top_point.x = width / 2 - 1;
 	falling_figure_left_top_point.y = 0;
 }
@@ -95,7 +100,12 @@ void Field:: set_new_figure(Figure f) {
 void Field::set_rotated_figure(Figure f) {
 	int tempx = falling_figure_left_top_point.x;
 	int tempy =	falling_figure_left_top_point.y;
-	falling_figure = f;
+	falling_figure.set_figure_coord(f.get_figure_coord());
+	falling_figure.set_diff(f.get_diff());
+	falling_figure.set_maxX(f.get_maxX());
+	falling_figure.set_maxY(f.get_maxY());
+	falling_figure.set_minX(f.get_minX());
+	falling_figure.set_minY(f.get_minY());
 	falling_figure_left_top_point.x = tempx;
 	falling_figure_left_top_point.y = tempy;
 }
@@ -108,10 +118,6 @@ void Field::set_previous_figure_state_on_field(array<Coord, 4> _figure_coord) {
 	previous_falling_figure_state.set_figure_coord(_figure_coord);
 }
 
-void Field::set_falling_figure_state_on_field(array<Coord, 4> _figure_coord) {
-	falling_figure.set_figure_coord(_figure_coord);
-}
-
 Figure Field::get_previous_figure_state() {
 	return previous_falling_figure_state;
 }
@@ -121,30 +127,20 @@ void Field::set_figure_left_top_point(Coord c) {
 	falling_figure_left_top_point.y = c.y;
 }
 
-void Field::set_figure_left_top_point_to_zero() {
-	falling_figure_left_top_point.x = width / 2 - 1;
-	falling_figure_left_top_point.y = 0;
-}
-
 const Coord Field::get_figure_left_top_point() {
 	return falling_figure_left_top_point;
 }
 
-int** Field::get_field_cells() {
-	return field_cells;
-}
-
-void Field::set_field_cells(int** _field_cells) { // может вместо двумерного массива вставить что-то из STL?
-	for (int i = 0; i < width; i++)
-	{
-		for (int j = 0; j < height; j++) {
-			field_cells[i][j] = _field_cells[i][j];
-		}	
-	}
-}
-
 int Field::get_cell_value_by_indexes(int i, int j) {
 	return field_cells[i][j];
+}
+
+void Field::set_next_figure() {
+	next_figure.CreateFigure();
+}
+
+Figure Field::get_next_figure() {
+	return next_figure;
 }
 
 void Field::set_cell_value_by_indexes(int value, int i, int j) {

@@ -20,7 +20,7 @@ Figure::Figure()
 	CreateFigure();
 }
 
-Figure::Figure(const Figure &figure)
+Figure:: Figure(const Figure &figure)
 {
 	figure_coord = figure.figure_coord;
 	figure_left_top_point = figure.figure_left_top_point;
@@ -31,12 +31,59 @@ Figure::Figure(const Figure &figure)
 	dif = figure.dif;
 }
 
+Figure Figure::operator=(const Figure & figure)
+{
+	figure_coord = figure.figure_coord;
+	figure_left_top_point = figure.figure_left_top_point;
+	maxx = figure.maxx;
+	maxy = figure.maxy;
+	minx = figure.minx;
+	miny = figure.miny;
+	dif = figure.dif;
+	return Figure();
+}
+
 Figure::~Figure()
 {
 }
 
 array<Coord, 4> Figure::get_figure_coord() {
 	return figure_coord;
+}
+
+void Figure::set_figure_left_top_point(Coord ltp)
+{
+	figure_left_top_point.x = ltp.x;
+	figure_left_top_point.y = ltp.y;
+}
+
+const int Figure::get_figure_fraction_size() {
+	return figure_fraction_size;
+}
+
+void Figure::set_maxX(int _maxx)
+{
+	maxx = _maxx;
+}
+
+void Figure::set_maxY(int _maxy)
+{
+	maxy = _maxy;
+}
+
+void Figure::set_minX(int _minx)
+{
+	minx = _minx;
+}
+
+void Figure::set_minY(int _miny)
+{
+	miny = _miny;
+}
+
+void Figure::set_diff(int _dif)
+{
+	dif = _dif;
 }
 
 void Figure::set_figure_coord(array<Coord, 4> _figure_coord) {
@@ -69,7 +116,7 @@ void Figure::CreateFigure() {
 
 
 void Figure::SetMinMaxCoord() {
-	for (int i = 0; i < 4; i++) {
+	for (int i = 0; i < figure_fraction_size; i++) {
 		if (figure_coord[i].y > maxy) maxy = figure_coord[i].y;
 		if (figure_coord[i].x > maxx) maxx = figure_coord[i].x;
 		if (figure_coord[i].x < minx) minx = figure_coord[i].x;
@@ -83,13 +130,13 @@ Figure* Figure::Rotate_figure_up() {
 	if (dif) {
 		maxx = 0;
 		minx = figure_left_top_point.x;
-		for (int i = 0; i < 4; i++)
+		for (int i = 0; i < figure_fraction_size; i++)
 		{
 			figure_coord[i].x = figure_coord[i].x - dif;
 			if (figure_coord[i].x > maxx) maxx = figure_coord[i].x;
 		}
 	}
-	for (int i = 0; i < 4; i++) {
+	for (int i = 0; i < figure_fraction_size; i++) {
 		int temp = figure_coord[i].y;
 		figure_coord[i].y = maxy - (maxx - figure_coord[i].x);
 		figure_coord[i].x = maxx + maxy - temp - 1;
@@ -103,13 +150,13 @@ Figure* Figure::Rotate_figure_down() {
 	if (dif) {
 		maxy = 0;
 		miny = figure_left_top_point.y;
-		for (int i = 0; i < 4; i++)
+		for (int i = 0; i < figure_fraction_size; i++)
 		{
 			figure_coord[i].y = figure_coord[i].y - dif;
 			if (figure_coord[i].y > maxy) maxy = figure_coord[i].y;
 		}
 	}
-	for (int i = 0; i < 4; i++) {
+	for (int i = 0; i < figure_fraction_size; i++) {
 		int temp = figure_coord[i].x;
 		figure_coord[i].x = maxx - (maxy - figure_coord[i].y);
 		figure_coord[i].y = maxy + maxx - temp - 1;

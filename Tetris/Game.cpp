@@ -26,9 +26,6 @@ Field Game::get_field() {
 //Можно вызвать delete дважды (двойное удаление, double delete).
 //Можно вызвать не ту форму оператора : delete вместо delete[] или наоборот(неопределённое поведение, undefined behavior).
 //Можно использовать объект после вызова delete (dangling pointer).
-// фигура цепляется боком тоже, должна цепляться только вертикально
-// стыковка фигуры не всегда адекватна, бывает заходит на тело другой фигуры. ну и боком тоже, да
-// программа самопроизвольно закрывается, на нной фигуре
 //Тут всё просто и большинству известно, что для подобных целей в С++ следует использовать стандартный контейнер std::vector**.Он сам выделит память в конструкторе и освободит её в деструкторе.К тому же, он ещё может менять свой размер во время жизни
 bool Game::Is_falling_figure_collision(int offset_x, int offset_y) {
 	// если дном не удраятеся, а ударяется только торцом то сделать проверку, чтобы фигура в бок не залипала
@@ -231,7 +228,7 @@ void Game::Erase_complete_row(int index) { // вот здесь надо поработать
 void Game::Update_field() {
 	int row_index = Field_check_full_row_index();
 	while (row_index != -1) {
-		cout << endl << row_index; 
+//		cout << endl << row_index; 
 		Erase_complete_row(row_index);
 		row_index = Field_check_full_row_index();
 	}
@@ -295,8 +292,10 @@ void Game::StartGame() {
 		else {
 			Set_figure_as_a_field_part();
 			Update_field();
-			figure.CreateFigure();
-			game_field.set_new_figure(figure);
+		//	figure.CreateFigure();
+		//	game_field.set_new_figure(figure);
+			game_field.set_new_figure(game_field.get_next_figure());
+			game_field.set_next_figure();
 		}
 		Place_figure();
 		view.DrawField(game_field);
