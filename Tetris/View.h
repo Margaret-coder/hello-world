@@ -21,7 +21,7 @@ class View
 	char const * str;
 	int keyboard_key;
 	//Coord falling_figure_previous_left_top_point; not needed
-	array<Coord, 4> falling_figure_previous_state; // for rotated figure previous display deleting
+	array<Coord, 4> next_figure_previous_state; // for next figure previous display deleting
 public:
 	View();
 	View(Field game_field);

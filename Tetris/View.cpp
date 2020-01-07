@@ -10,7 +10,7 @@ View::View()
 
 View::View(Field _game_field)
 {
-	falling_figure_previous_state = _game_field.get_figure().get_figure_coord();
+	next_figure_previous_state = _game_field.get_next_figure().get_figure_coord();
 	offset.x = 10;
 	offset.y = 1;
 	keyboard_key = 0;
@@ -69,16 +69,24 @@ void View::DrawField(Field game_field) {
 	for (int j = 0; j < width/2; ++j)
 		cout << num++ << "  ";
 
-
+	// предпоказ следующей фигуры
 	SetConsoleTextAttribute(hOut_, BACKGROUND_BLUE | BACKGROUND_GREEN | FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN);
-	for (int i = 0; i < game_field.get_next_figure().get_figure_fraction_size(); i++) {
+	for (int i = 0; i < game_field.get_next_figure().get_figure_coord().size(); i++) {
+		c.X = offset.x * 2 + game_field.get_width() + next_figure_previous_state[i].x;
+		c.Y = offset.y + next_figure_previous_state[i].y + 1;
+		SetConsoleCursorPosition(hOut_, c);
+		cout << " ";
+	}
+	next_figure_previous_state = game_field.get_next_figure().get_figure_coord();
+	for (int i = 0; i < game_field.get_next_figure().get_figure_coord().size(); i++) {
 		c.X = offset.x * 2 + game_field.get_width() + game_field.get_next_figure().get_figure_coord()[i].x;
-		c.Y = offset.y + game_field.get_next_figure().get_figure_coord()[i].y;
+		c.Y = offset.y + game_field.get_next_figure().get_figure_coord()[i].y + 1;
 		SetConsoleCursorPosition(hOut_, c);
 		cout << "*";
+		cout << endl;
+		cout << game_field.get_next_figure().get_figure_coord()[i].x << " ";
+		cout << game_field.get_next_figure().get_figure_coord()[i].y;
 	}
-	// «ј ќћћћ»“№—я
-// рисуем следующую фигуру
 }
 
 const char* View::ViewAction(Field game_field) { // работает конструктор копировани€

@@ -22,10 +22,7 @@ Field Game::get_field() {
 	return game_field;
 }
 
-// Можно забыть вызвать delete в случае исключения или досрочного возврата из функции (тоже утечка памяти).
-//Можно вызвать delete дважды (двойное удаление, double delete).
-//Можно вызвать не ту форму оператора : delete вместо delete[] или наоборот(неопределённое поведение, undefined behavior).
-//Можно использовать объект после вызова delete (dangling pointer).
+
 //Тут всё просто и большинству известно, что для подобных целей в С++ следует использовать стандартный контейнер std::vector**.Он сам выделит память в конструкторе и освободит её в деструкторе.К тому же, он ещё может менять свой размер во время жизни
 bool Game::Is_falling_figure_collision(int offset_x, int offset_y) {
 	// если дном не удраятеся, а ударяется только торцом то сделать проверку, чтобы фигура в бок не залипала
@@ -292,8 +289,6 @@ void Game::StartGame() {
 		else {
 			Set_figure_as_a_field_part();
 			Update_field();
-		//	figure.CreateFigure();
-		//	game_field.set_new_figure(figure);
 			game_field.set_new_figure(game_field.get_next_figure());
 			game_field.set_next_figure();
 		}

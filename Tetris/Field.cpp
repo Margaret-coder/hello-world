@@ -55,7 +55,7 @@ Field::Field(const Field& _field)
     falling_figure_left_top_point.x = _field.falling_figure_left_top_point.x;
 	falling_figure_left_top_point.y = _field.falling_figure_left_top_point.y;
 	falling_figure = _field.falling_figure; 
-
+	next_figure = _field.next_figure;
 	previous_falling_figure_state = _field.previous_falling_figure_state;
 }
 
