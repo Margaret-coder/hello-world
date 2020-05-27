@@ -1,6 +1,7 @@
+#pragma once
+#include <windows.h>
 #include "Types.h"
 #include "Figure.h"
-#pragma once
 
 // Field.h
 
@@ -11,7 +12,7 @@ class Field
 	int width;
 	int height;
 	int **field_cells;
-	Coord falling_figure_left_top_point; // figure left top point related to field coordinates
+	COORD falling_figure_left_top_point; // figure left top point related to field coordinates
 	Figure falling_figure;
 	Figure previous_falling_figure_state;
 	Figure next_figure; // для отображения следующей фигуры справа от поля
@@ -25,10 +26,10 @@ public:
 	void set_new_figure(Figure f);
 	void set_rotated_figure(Figure f);
 	Figure get_figure();
-	void set_previous_figure_state_on_field(array<Coord, 4> _figure_coord);
+	void set_previous_figure_state_on_field(array<COORD, 4> _figure_COORD);
 	Figure get_previous_figure_state();
-	void set_figure_left_top_point(Coord c);
-	const Coord get_figure_left_top_point();
+	void set_figure_left_top_point(COORD c);
+	const COORD get_figure_left_top_point();
 	void set_next_figure();
 	Figure get_next_figure();
 	void set_cell_value_by_indexes(int value, int i, int j);

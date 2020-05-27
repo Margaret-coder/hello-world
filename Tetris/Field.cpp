@@ -26,15 +26,15 @@ Field::Field()
 			field_cells[i][j] = 0; 
 		}
 	}
-	falling_figure_left_top_point.x = width / 2 - 1;
-	falling_figure_left_top_point.y = 0;
+	falling_figure_left_top_point.X = width / 2 - 1;
+	falling_figure_left_top_point.Y = 0;
 }
 
 Field::Field(int _width, int _height)
 {
 	width = _width;
 	height = _height;
-	falling_figure_left_top_point.x = width / 2 - 1;
+	falling_figure_left_top_point.X = width / 2 - 1;
 }
 
 Field::Field(const Field& _field)
@@ -52,8 +52,8 @@ Field::Field(const Field& _field)
 			field_cells[i][j] = _field.field_cells[i][j];
 		}
 	}
-    falling_figure_left_top_point.x = _field.falling_figure_left_top_point.x;
-	falling_figure_left_top_point.y = _field.falling_figure_left_top_point.y;
+    falling_figure_left_top_point.X = _field.falling_figure_left_top_point.X;
+	falling_figure_left_top_point.Y = _field.falling_figure_left_top_point.Y;
 	falling_figure = _field.falling_figure; 
 	next_figure = _field.next_figure;
 	previous_falling_figure_state = _field.previous_falling_figure_state;
@@ -87,47 +87,39 @@ Field::~Field()
 
 void Field:: set_new_figure(Figure f) {
 //	cout << endl << figure_counterr++;
-	falling_figure.set_figure_coord(f.get_figure_coord());
-	falling_figure.set_diff(f.get_diff());
-	falling_figure.set_maxX(f.get_maxX());
-	falling_figure.set_maxY(f.get_maxY());
-	falling_figure.set_minX(f.get_minX());
-	falling_figure.set_minY(f.get_minY());
-	falling_figure_left_top_point.x = width / 2 - 1;
-	falling_figure_left_top_point.y = 0;
+	falling_figure.set_figure_alignment(f.get_figure_alignment());
+	falling_figure.set_rotation_diff_max_min_XY(f.get_diff(), f.get_maxX(), f.get_maxY(), f.get_minX(), f.get_minY());
+	falling_figure_left_top_point.X = width / 2 - 1;
+	falling_figure_left_top_point.Y = 0;
 }
 
 void Field::set_rotated_figure(Figure f) {
-	int tempx = falling_figure_left_top_point.x;
-	int tempy =	falling_figure_left_top_point.y;
-	falling_figure.set_figure_coord(f.get_figure_coord());
-	falling_figure.set_diff(f.get_diff());
-	falling_figure.set_maxX(f.get_maxX());
-	falling_figure.set_maxY(f.get_maxY());
-	falling_figure.set_minX(f.get_minX());
-	falling_figure.set_minY(f.get_minY());
-	falling_figure_left_top_point.x = tempx;
-	falling_figure_left_top_point.y = tempy;
+	int tempx = falling_figure_left_top_point.X;
+	int tempy =	falling_figure_left_top_point.Y;
+	falling_figure.set_figure_alignment(f.get_figure_alignment());
+	falling_figure.set_rotation_diff_max_min_XY(f.get_diff(), f.get_maxX(), f.get_maxY(), f.get_minX(), f.get_minY());
+	falling_figure_left_top_point.X = tempx;
+	falling_figure_left_top_point.Y = tempy;
 }
 
 Figure Field::get_figure() {
 	return falling_figure;
 }
 
-void Field::set_previous_figure_state_on_field(array<Coord, 4> _figure_coord) {
-	previous_falling_figure_state.set_figure_coord(_figure_coord);
+void Field::set_previous_figure_state_on_field(array<COORD, 4> _figure_coord) {
+	previous_falling_figure_state.set_figure_alignment(_figure_coord);
 }
 
 Figure Field::get_previous_figure_state() {
 	return previous_falling_figure_state;
 }
 
-void Field::set_figure_left_top_point(Coord c) {
-	falling_figure_left_top_point.x = c.x;
-	falling_figure_left_top_point.y = c.y;
+void Field::set_figure_left_top_point(COORD c) {
+	falling_figure_left_top_point.X = c.X;
+	falling_figure_left_top_point.Y = c.Y;
 }
 
-const Coord Field::get_figure_left_top_point() {
+const COORD Field::get_figure_left_top_point() {
 	return falling_figure_left_top_point;
 }
 
@@ -159,6 +151,6 @@ Field Field::get_field() {
 }
 
 void Field::Move_figure_by_offset(int offset_x, int offset_y) {
-	falling_figure_left_top_point.x = falling_figure_left_top_point.x + offset_x;
-	falling_figure_left_top_point.y = falling_figure_left_top_point.y + offset_y;
+	falling_figure_left_top_point.X = falling_figure_left_top_point.X + offset_x;
+	falling_figure_left_top_point.Y = falling_figure_left_top_point.Y + offset_y;
 }

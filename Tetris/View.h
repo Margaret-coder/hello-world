@@ -5,7 +5,6 @@
 #include <map>
 #include <iterator> 
 #include "Types.h"
-#include "Figure.h"
 #include "Field.h"
 
 #pragma once
@@ -17,11 +16,11 @@ class View
 {
 	HANDLE hOut_ = GetStdHandle(STD_OUTPUT_HANDLE);
 	HANDLE hIn = GetStdHandle(STD_INPUT_HANDLE);
-	Coord offset;
+	COORD offset;
 	char const * str;
 	int keyboard_key;
 	//Coord falling_figure_previous_left_top_point; not needed
-	array<Coord, 4> next_figure_previous_state; // for next figure previous display deleting
+	array<COORD, 4> next_figure_previous_state; // for next figure previous display deleting
 public:
 	View();
 	View(Field game_field);

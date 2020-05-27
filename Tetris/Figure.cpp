@@ -6,8 +6,8 @@ using namespace std;
 
 Figure::Figure()
 {
-	figure_left_top_point.x = figure_coord[0].x;
-	figure_left_top_point.y = figure_coord[0].y;
+	figure_left_top_point.X = figure_coord[0].X;
+	figure_left_top_point.Y = figure_coord[0].Y;
 	SetMinMaxCoord();
 	shapes = { { "Stick", 1 }, ///явная инициализация map, this map is not in usage yet
 	{ "Square", 2 },
@@ -33,6 +33,7 @@ Figure:: Figure(const Figure &figure)
 
 Figure Figure::operator=(const Figure & figure)
 {
+	if (this == &figure) return *this;
 	figure_coord = figure.figure_coord;
 	figure_left_top_point = figure.figure_left_top_point;
 	maxx = figure.maxx;
@@ -40,51 +41,37 @@ Figure Figure::operator=(const Figure & figure)
 	minx = figure.minx;
 	miny = figure.miny;
 	dif = figure.dif;
-	return Figure();
+	return *this;
 }
 
 Figure::~Figure()
 {
 }
 
-array<Coord, 4> Figure::get_figure_coord() {
+void Figure::set_figure_alignment(array<COORD, 4> _figure_coord) {
+	figure_coord = _figure_coord;
+}
+
+array<COORD, 4> Figure::get_figure_alignment() {
 	return figure_coord;
 }
 
-void Figure::set_figure_left_top_point(Coord ltp)
+void Figure::set_figure_left_top_point(COORD ltp)
 {
-	figure_left_top_point.x = ltp.x;
-	figure_left_top_point.y = ltp.y;
+	figure_left_top_point.X = ltp.X;
+	figure_left_top_point.Y = ltp.Y;
 }
 
-void Figure::set_maxX(int _maxx)
+void Figure::set_rotation_diff_max_min_XY(int _diff, int _maxx, int _maxy, int _minx, int _miny)
 {
 	maxx = _maxx;
-}
-
-void Figure::set_maxY(int _maxy)
-{
 	maxy = _maxy;
-}
-
-void Figure::set_minX(int _minx)
-{
 	minx = _minx;
-}
-
-void Figure::set_minY(int _miny)
-{
 	miny = _miny;
+	dif = _diff;
 }
 
-void Figure::set_diff(int _dif)
-{
-	dif = _dif;
-}
 
-void Figure::set_figure_coord(array<Coord, 4> _figure_coord) {
-	figure_coord = _figure_coord;
-}
 
 // {{0, 0}, {1, 0}, {2, 0}, {3, 0}} - stick, figure#1 
 // {{0, 0}, {1, 0}, {0, 1}, {1, 1}} - square, figure#2 
@@ -113,49 +100,49 @@ void Figure::CreateFigure() {
 
 void Figure::SetMinMaxCoord() {
 	for (int i = 0; i < figure_coord.size(); i++) {
-		if (figure_coord[i].y > maxy) maxy = figure_coord[i].y;
-		if (figure_coord[i].x > maxx) maxx = figure_coord[i].x;
-		if (figure_coord[i].x < minx) minx = figure_coord[i].x;
+		if (figure_coord[i].Y > maxy) maxy = figure_coord[i].Y;
+		if (figure_coord[i].X > maxx) maxx = figure_coord[i].X;
+		if (figure_coord[i].X < minx) minx = figure_coord[i].X;
 	}
-	dif = minx - figure_left_top_point.x;
+	dif = minx - figure_left_top_point.X;
 }
 
 Figure* Figure::Rotate_figure_up() {
-	minx = figure_coord[0].x;
+	minx = figure_coord[0].X;
 	SetMinMaxCoord();
 	if (dif) {
 		maxx = 0;
-		minx = figure_left_top_point.x;
+		minx = figure_left_top_point.X;
 		for (int i = 0; i < figure_coord.size(); i++)
 		{
-			figure_coord[i].x = figure_coord[i].x - dif;
-			if (figure_coord[i].x > maxx) maxx = figure_coord[i].x;
+			figure_coord[i].X = figure_coord[i].X - dif;
+			if (figure_coord[i].X > maxx) maxx = figure_coord[i].X;
 		}
 	}
 	for (int i = 0; i < figure_coord.size(); i++) {
-		int temp = figure_coord[i].y;
-		figure_coord[i].y = maxy - (maxx - figure_coord[i].x);
-		figure_coord[i].x = maxx + maxy - temp - 1;
+		int temp = figure_coord[i].Y;
+		figure_coord[i].Y = maxy - (maxx - figure_coord[i].X);
+		figure_coord[i].X = maxx + maxy - temp - 1;
 	}
 	return this;
 }
 
 Figure* Figure::Rotate_figure_down() {
-	minx = figure_coord[0].x;
+	minx = figure_coord[0].X;
 	SetMinMaxCoord();
 	if (dif) {
 		maxy = 0;
-		miny = figure_left_top_point.y;
+		miny = figure_left_top_point.Y;
 		for (int i = 0; i < figure_coord.size(); i++)
 		{
-			figure_coord[i].y = figure_coord[i].y - dif;
-			if (figure_coord[i].y > maxy) maxy = figure_coord[i].y;
+			figure_coord[i].Y = figure_coord[i].Y - dif;
+			if (figure_coord[i].Y > maxy) maxy = figure_coord[i].Y;
 		}
 	}
 	for (int i = 0; i < figure_coord.size(); i++) {
-		int temp = figure_coord[i].x;
-		figure_coord[i].x = maxx - (maxy - figure_coord[i].y);
-		figure_coord[i].y = maxy + maxx - temp - 1;
+		int temp = figure_coord[i].X;
+		figure_coord[i].X = maxx - (maxy - figure_coord[i].Y);
+		figure_coord[i].Y = maxy + maxx - temp - 1;
 	}
 	return this;
 }

@@ -10,9 +10,9 @@ View::View()
 
 View::View(Field _game_field)
 {
-	next_figure_previous_state = _game_field.get_next_figure().get_figure_coord();
-	offset.x = 10;
-	offset.y = 1;
+	next_figure_previous_state = _game_field.get_next_figure().get_figure_alignment();
+	offset.X = 10;
+	offset.Y = 1;
 	keyboard_key = 0;
 	system("color 3e");
 	CONSOLE_CURSOR_INFO cInfo = { 100, false };
@@ -26,14 +26,14 @@ View::~View()
 void View::DrawField(Field game_field) {
 
 	COORD c;
-	c.X = offset.x;
-	c.Y = offset.y;
+	c.X = offset.X;
+	c.Y = offset.Y;
 	int width = game_field.get_width();
 	int height = game_field.get_height();
 	int num = 0;
 	for (int i = 0; i <= width; i++)
 	{
-		c.Y = i + offset.y;
+		c.Y = i + offset.Y;
 		SetConsoleTextAttribute(hOut_, BACKGROUND_BLUE | BACKGROUND_GREEN | FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN);
 		SetConsoleCursorPosition(hOut_, c);
 		for (int j = 0; j <= height; j++)
@@ -71,21 +71,21 @@ void View::DrawField(Field game_field) {
 
 	// предпоказ следующей фигуры
 	SetConsoleTextAttribute(hOut_, BACKGROUND_BLUE | BACKGROUND_GREEN | FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN);
-	for (int i = 0; i < game_field.get_next_figure().get_figure_coord().size(); i++) {
-		c.X = offset.x * 2 + game_field.get_width() + next_figure_previous_state[i].x;
-		c.Y = offset.y + next_figure_previous_state[i].y + 1;
+	for (int i = 0; i < game_field.get_next_figure().get_figure_alignment().size(); i++) {
+		c.X = offset.X * 2 + game_field.get_width() + next_figure_previous_state[i].X;
+		c.Y = offset.Y + next_figure_previous_state[i].Y + 1;
 		SetConsoleCursorPosition(hOut_, c);
 		cout << " ";
 	}
-	next_figure_previous_state = game_field.get_next_figure().get_figure_coord();
-	for (int i = 0; i < game_field.get_next_figure().get_figure_coord().size(); i++) {
-		c.X = offset.x * 2 + game_field.get_width() + game_field.get_next_figure().get_figure_coord()[i].x;
-		c.Y = offset.y + game_field.get_next_figure().get_figure_coord()[i].y + 1;
+	next_figure_previous_state = game_field.get_next_figure().get_figure_alignment();
+	for (int i = 0; i < game_field.get_next_figure().get_figure_alignment().size(); i++) {
+		c.X = offset.X * 2 + game_field.get_width() + game_field.get_next_figure().get_figure_alignment()[i].X;
+		c.Y = offset.Y + game_field.get_next_figure().get_figure_alignment()[i].Y + 1;
 		SetConsoleCursorPosition(hOut_, c);
 		cout << "*";
 		cout << endl;
-		cout << game_field.get_next_figure().get_figure_coord()[i].x << " ";
-		cout << game_field.get_next_figure().get_figure_coord()[i].y;
+		cout << game_field.get_next_figure().get_figure_alignment()[i].X << " ";
+		cout << game_field.get_next_figure().get_figure_alignment()[i].Y;
 	}
 }
 
